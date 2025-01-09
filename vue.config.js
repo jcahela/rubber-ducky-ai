@@ -3,7 +3,7 @@ const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   pages: {
     content: {
-      entry: 'src/content/main.js',
+      entry: 'src//main.js',
       filename: 'content.html'
     }
   },
