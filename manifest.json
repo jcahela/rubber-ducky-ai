@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "AI Rubber Ducky",
+  "version": "1.0",
+  "description": "A debugging partner that's never busy",
+  "permissions": ["activeTab", "scripting"],
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["dist/content.js"],
+    "css": ["dist/css/content.css"]
+  }]
+}
