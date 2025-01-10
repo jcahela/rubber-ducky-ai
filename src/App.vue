@@ -1,8 +1,11 @@
 
 <script setup>
-import RubberDucky from './components/ui/RubberDucky/RubberDucky.vue'
+import { ref } from 'vue';
+import RubberDucky from './components/ui/RubberDucky/RubberDucky.vue';
+import Menu from './components/Menu.vue';
 
 // State
+const showMenu = ref(false);
 
 </script>
 
@@ -10,9 +13,11 @@ import RubberDucky from './components/ui/RubberDucky/RubberDucky.vue'
   <div class="rubber-ducky-container">
 
     <div class="rubber-ducky">
-      <RubberDucky width="65px"/>
+      <RubberDucky width="65px" @click="showMenu = !showMenu"/>
     </div>
+
   </div>
+  <Menu v-if="showMenu"/>
 </template>
 
 
