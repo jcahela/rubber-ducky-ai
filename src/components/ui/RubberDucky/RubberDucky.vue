@@ -12,7 +12,7 @@ const props = defineProps({
   // Color props
   backgroundColor: {
     type: String,
-    default: 'transparent'
+    default: '#FFFFFF'
   },
   duckColor: {
     type: String,
@@ -47,10 +47,10 @@ const props = defineProps({
   >
     <g>
       <rect x="0" :fill="backgroundColor" width="3000" height="3000"/>
-      <g>
+      <g class="ducky">
         <g>
           <g>
-            <path 
+            <path
               :fill="duckColor" 
               d="M2190.118,1434.824c-246.691,282.498-628.62,81.523-520.282-28.548l-0.061-0.051 c110.778-86.449,184.663-203.856,195.711-332.546c22.389-260.646-221.247-468.654-544.162-464.6 c-322.928,4.025-602.819,218.644-625.198,479.308c-10.312,120.123,35.974,229.012,120.378,311.169 c-127.627,55.625-227.648,149.864-270.703,270.553c-87.885,246.434,87.151,599.549,400.484,677.716 c39.459,9.813,79.073,16.261,118.415,19.49c0.269,0.037,0.501,0.063,0.765,0.092 c849.458,72.914,1240.544,15.791,1462.988-744.529C2599.607,1379.551,2362.149,1237.924,2190.118,1434.824z"
             />
@@ -88,7 +88,13 @@ svg {
   display: block;
 }
 
-path[fill="var(--duck-color)"]:hover {
-  cursor: pointer; 
+.ducky {
+  transition: transform 0.3s ease;
+  transform-origin: center center;
+}
+
+.ducky:hover {
+  cursor: pointer;
+  transform: scale(1.1);
 }
 </style>

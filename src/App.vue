@@ -34,10 +34,12 @@ import RubberDucky from './components/ui/RubberDucky/RubberDucky.vue'
     width: 100px;
     height: 100px;
     border-radius: 20%;
-    border: 1px solid #0000005a;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #FFFFFF;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    border: 1px solid #0000005a;
   }
 }
 
