@@ -10,14 +10,19 @@ const showMenu = ref(false);
 </script>
 
 <template>
-  <div class="rubber-ducky-container">
+  <div class="rubber-ducky-container" :class="{ 'rubber-ducky-container-menu': showMenu }">
 
-    <div class="rubber-ducky">
-      <RubberDucky width="65px" @click="showMenu = !showMenu"/>
+    <div class="rubber-ducky" :class="{ 'rubber-ducky-menu': showMenu }">
+      <RubberDucky
+        width="65px"
+        height="65px"
+        :backgroundColor="showMenu ? 'transparent' : '#FFFFFF'"
+        @click="showMenu = !showMenu"
+      />
+      <Menu v-if="showMenu"/>
     </div>
 
   </div>
-  <Menu v-if="showMenu"/>
 </template>
 
 
@@ -29,7 +34,7 @@ const showMenu = ref(false);
   left: -130px;
   transition: transform 0.3s ease;
   z-index: 2147483647;
-  width: 140px;
+  min-width: 140px;
   display: flex;
   justify-content: flex-end;
   margin: 0;
@@ -45,10 +50,29 @@ const showMenu = ref(false);
     background-color: #FFFFFF;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
     border: 1px solid #0000005a;
+    transition: all 0.3s ease;
+  }
+
+  .rubber-ducky-menu {
+    height: 500px;
+    width: 400px;
+    border-radius: 10px;
+    justify-content: flex-start;
+    align-items: flex-end;
+    flex-direction: column;
+    padding: 5px;
   }
 }
 
 .rubber-ducky-container:hover {
   transform: translateX(110px);
+}
+
+.rubber-ducky-container-menu {
+  left: 0;
+}
+
+.rubber-ducky-container-menu:hover {
+  transform: translateX(0px);
 }
 </style>
