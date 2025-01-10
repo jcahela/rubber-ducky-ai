@@ -97,4 +97,8 @@ svg {
   cursor: pointer;
   transform: scale(1.1);
 }
+
+.ducky:active {
+  transform: scale(0.9);
+}
 </style>

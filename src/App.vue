@@ -10,7 +10,7 @@ import RubberDucky from './components/ui/RubberDucky/RubberDucky.vue'
   <div class="rubber-ducky-container">
 
     <div class="rubber-ducky">
-      <RubberDucky width="80px " height="100px"/>
+      <RubberDucky width="65px"/>
     </div>
   </div>
 </template>
