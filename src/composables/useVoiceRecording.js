@@ -1,4 +1,3 @@
-// src/composables/useVoiceRecognition.js
 import { ref } from 'vue'
 
 export function useVoiceRecording() {

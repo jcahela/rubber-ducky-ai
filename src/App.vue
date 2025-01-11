@@ -39,8 +39,22 @@ const showMenu = ref(false);
   justify-content: flex-end;
   margin: 0;
   padding-right: 20px;
+}
 
-  .rubber-ducky {
+.rubber-ducky-container-menu {
+  left: 0;
+  transition: all 0.5s ease;
+}
+
+.rubber-ducky-container:hover {
+  transform: translateX(110px);
+}
+
+.rubber-ducky-container-menu:hover {
+  transform: translateX(0px);
+}
+
+.rubber-ducky {
     width: 100px;
     height: 100px;
     border-radius: 20%;
@@ -51,28 +65,21 @@ const showMenu = ref(false);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
     border: 1px solid #0000005a;
     transition: all 0.3s ease;
-  }
-
-  .rubber-ducky-menu {
-    height: 500px;
-    width: 400px;
-    border-radius: 10px;
-    justify-content: flex-start;
-    align-items: flex-end;
-    flex-direction: column;
-    padding: 5px;
-  }
 }
 
-.rubber-ducky-container:hover {
-  transform: translateX(110px);
+.rubber-ducky-menu {
+  height: 500px;
+  width: 400px;
+  justify-content: flex-start;
+  align-items: flex-end;
+  flex-direction: column;
+  padding: 5px;
+  border-radius: 0;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  border: 1px solid #0000004c;
+  border-left: none;
 }
 
-.rubber-ducky-container-menu {
-  left: 0;
-}
-
-.rubber-ducky-container-menu:hover {
-  transform: translateX(0px);
-}
 </style>
