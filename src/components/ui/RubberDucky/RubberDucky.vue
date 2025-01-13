@@ -88,13 +88,16 @@ svg {
   display: block;
 }
 
+svg:hover {
+  cursor: pointer;
+}
+
 .ducky {
   transition: transform 0.3s ease;
   transform-origin: center center;
 }
 
 .ducky:hover {
-  cursor: pointer;
   transform: scale(1.1);
 }
 

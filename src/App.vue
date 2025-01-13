@@ -14,8 +14,8 @@ const showMenu = ref(false);
 
     <div class="rubber-ducky" :class="{ 'rubber-ducky-menu': showMenu }">
       <RubberDucky
-        width="65px"
-        height="65px"
+        width="75px"
+        height="75px"
         :backgroundColor="showMenu ? 'transparent' : '#FFFFFF'"
         @click="showMenu = !showMenu"
       />
@@ -31,23 +31,21 @@ const showMenu = ref(false);
 .rubber-ducky-container {
   position: fixed;
   top: 60px;
-  left: -130px;
+  left: -110px;
   transition: transform 0.3s ease;
   z-index: 2147483647;
-  min-width: 140px;
-  display: flex;
-  justify-content: flex-end;
+  min-width: 120px;
   margin: 0;
-  padding-right: 20px;
+  padding-right: 50px;
 }
 
 .rubber-ducky-container-menu {
   left: 0;
-  transition: all 0.5s ease;
+  transition: all 0.3s ease;
 }
 
 .rubber-ducky-container:hover {
-  transform: translateX(110px);
+  transform: translateX(85px);
 }
 
 .rubber-ducky-container-menu:hover {
@@ -55,16 +53,16 @@ const showMenu = ref(false);
 }
 
 .rubber-ducky {
-    width: 100px;
-    height: 100px;
-    border-radius: 20%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #FFFFFF;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-    border: 1px solid #0000005a;
-    transition: all 0.3s ease;
+  width: 100%;
+  height: 100px;
+  border-radius: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #FFFFFF;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  border: 1px solid #afafaf;
+  transition: all 0.3s ease;
 }
 
 .rubber-ducky-menu {
@@ -75,8 +73,8 @@ const showMenu = ref(false);
   flex-direction: column;
   padding: 5px;
   border-radius: 0;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
   border: 1px solid #0000004c;
   border-left: none;
