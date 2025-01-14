@@ -6,17 +6,11 @@ const {
   startRecording,
   stopRecording,
   isRecording,
-  getAudioBlob
+  getAudioBlob,
+  audioLevel,
+  playbackRecording,
+  discardRecording
 } = useVoiceRecording();
-
-const playbackRecording = async () => {
-  const audioBlob = await getAudioBlob();
-
-  if (audioBlob) {
-    const audio = new Audio(URL.createObjectURL(audioBlob));
-    audio.play();
-  }
-};
 
 const recordingExists = computed(() => {
   return !!getAudioBlob();
@@ -27,24 +21,32 @@ const recordingExists = computed(() => {
 <template>
   <div class="menu">
     <button 
-            v-if="!isRecording" 
-            @click="startRecording"
-        >
-            Start Recording
-        </button>
-        <button 
-            v-else 
-            @click="stopRecording"
-        >
-            Stop Recording
-        </button>
-        
-        <button 
-            @click="playbackRecording" 
-            :disabled="!recordingExists"
-        >
-            Play Recording
-        </button>
+      v-if="!isRecording" 
+      @click="startRecording"
+      :disabled="isRecording || recordingExists"
+    >
+      Start Recording
+    </button>
+    <button 
+      v-else 
+      @click="stopRecording"
+    >
+      Stop Recording
+    </button>
+    
+    <button 
+      @click="playbackRecording" 
+      :disabled="isRecording || !recordingExists"
+    >
+      Play Recording
+    </button>
+    <button 
+      @click="discardRecording" 
+      :disabled="isRecording || !recordingExists"
+    >
+      Discard Recording
+    </button>
+    
   </div>
 </template>
 
