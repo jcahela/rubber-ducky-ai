@@ -2,6 +2,7 @@ import { ref, onUnmounted } from 'vue'
 
 export function useVoiceRecording() {
     const isRecording = ref(false)
+    const isAudioPlaying = ref(false)
     const audioChunks = ref([])
     const audioLevel = ref(0);
     let mediaRecorder = null
@@ -9,6 +10,7 @@ export function useVoiceRecording() {
     let audioContext = null
     let analyser = null
     let animationFrame = null
+    let audio = null
 
     const startRecording = async () => {
         if (isRecording.value) return
@@ -81,9 +83,23 @@ export function useVoiceRecording() {
     }
 
     const playbackRecording = () => {
-        const audio = new Audio(URL.createObjectURL(getAudioBlob()));
+        isAudioPlaying.value = true;
+        if (audio) {
+            audio.play();
+            updateAudioLevel();
+            return;
+        }
+        audio = new Audio(URL.createObjectURL(getAudioBlob()));
         audio.play();
         updateAudioLevel();
+    }
+
+    const pausePlayback = () => {
+        if (audio) {
+            audio.pause();
+            cancelAnimationFrame(animationFrame);
+            isAudioPlaying.value = false;
+        }
     }
 
     const discardRecording = () => {
@@ -105,10 +121,12 @@ export function useVoiceRecording() {
     return {
         isRecording,
         audioLevel,
+        isAudioPlaying,
         startRecording,
         stopRecording,
         getAudioBlob,
         discardRecording,
-        playbackRecording
+        playbackRecording,
+        pausePlayback
     }
 }

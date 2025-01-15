@@ -9,7 +9,9 @@ const {
   getAudioBlob,
   audioLevel,
   playbackRecording,
-  discardRecording
+  discardRecording,
+  pausePlayback,
+  isAudioPlaying
 } = useVoiceRecording();
 
 const recordingExists = computed(() => {
@@ -36,15 +38,21 @@ const recordingExists = computed(() => {
     
     <button 
       @click="playbackRecording" 
-      :disabled="isRecording || !recordingExists"
+      :disabled="isRecording || !recordingExists || isAudioPlaying"
     >
-      Play Recording
+      Play
+    </button>
+    <button 
+      @click="pausePlayback"
+      :disabled="isRecording || !recordingExists || !isAudioPlaying"
+    >
+      Pause
     </button>
     <button 
       @click="discardRecording" 
       :disabled="isRecording || !recordingExists"
     >
-      Discard Recording
+      Discard
     </button>
     
   </div>
