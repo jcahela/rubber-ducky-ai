@@ -19,7 +19,7 @@ export function useVoiceRecording() {
                     sampleRate: 16000,
                     channelCount: 1
                 }
-            })
+            });
 
             audioContext = new AudioContext();
             const source = audioContext.createMediaStreamSource(audioStream);
@@ -27,43 +27,41 @@ export function useVoiceRecording() {
             analyser.fftSize = 256;
             source.connect(analyser);
             
-            mediaRecorder = new MediaRecorder(audioStream)
-            audioChunks.value = []
+            mediaRecorder = new MediaRecorder(audioStream);
+            audioChunks.value = [];
 
             mediaRecorder.ondataavailable = (event) => {
-                audioChunks.value.push(event.data)
+                audioChunks.value.push(event.data);
             }
 
-            mediaRecorder.start(100) // Collect data in chunks every 100ms
-            isRecording.value = true
-            console.log('Recording started')
+            mediaRecorder.start(100); // Collect data in chunks every 100ms
+            isRecording.value = true;
 
             updateAudioLevel();
         } catch (err) {
-            console.error('Error starting recording:', err)
+            console.error('Error starting recording:', err);
         }
     }
 
     const updateAudioLevel = () => {
         if (!analyser) return
         
-        const volumeArray = new Uint8Array(analyser.frequencyBinCount)
-        analyser.getByteFrequencyData(volumeArray)
+        const volumeArray = new Uint8Array(analyser.frequencyBinCount);
+        analyser.getByteFrequencyData(volumeArray);
 
         const filteredData = volumeArray.filter((num) => num != 0);
 
         let rawAverage = volumeArray.reduce((a, b) => a + b) / filteredData.length || 1;
-        const average = rawAverage + (rawAverage * 0.2) > 255 ? 255 : rawAverage + (rawAverage * 0.2) 
-        console.log(average);
+        const average = rawAverage + (rawAverage * 0.2) > 255 ? 255 : rawAverage + (rawAverage * 0.2);
         audioLevel.value = average / 255;        
-        animationFrame = requestAnimationFrame(updateAudioLevel)
+        animationFrame = requestAnimationFrame(updateAudioLevel);
     }
 
     const stopRecording = () => {
         if (mediaRecorder && isRecording.value) {
-            mediaRecorder.stop()
-            audioStream.getTracks().forEach(track => track.stop())
-            isRecording.value = false
+            mediaRecorder.stop();
+            audioStream.getTracks().forEach(track => track.stop());
+            isRecording.value = false;
             
             if (audioContext) {
                 audioContext.close();
