@@ -11,7 +11,7 @@ const props = defineProps({
 
 const ticks = ref([])
 const containerWidth = 300
-const jumpSize = 20 // Size of each jump - smaller for closer ticks
+const jumpSize = 7 // Size of each jump - smaller for closer ticks
 const tickSpacing = jumpSize // Match spacing to jump size for stationary effect
 const frameInterval = 50 // Time between jumps
 
@@ -67,10 +67,10 @@ onUnmounted(() => {
 .audio-meter {
   position: relative;
   width: 300px;
-  height: 128px;
+  height: 64px;
   background-color: #f3f4f6;
   border: 1px solid #d1d5db;
   border-radius: 4px;
-  overflow: hidden;
+  overflow: visible;
 }
 </style>
