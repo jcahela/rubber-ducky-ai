@@ -12,8 +12,8 @@ const props = defineProps({
 
 const BASE_LEVEL = 0.09;
 const AUDIO_THRESHOLD = 0.3;
-const CALCULATED_LEVEL = props.level < AUDIO_THRESHOLD ? BASE_LEVEL : props.level;
-const CALCULATED_HEIGHT_PERCENTAGE = CALCULATED_LEVEL * 100;
+const calculatedLevel = props.level < AUDIO_THRESHOLD ? BASE_LEVEL : props.level;
+const calculatedHeightPercentage = calculatedLevel * 100;
 </script>
 
 <template>
@@ -21,7 +21,7 @@ const CALCULATED_HEIGHT_PERCENTAGE = CALCULATED_LEVEL * 100;
     class="audio-tick"
     :style="{ 
       transform: `translateX(${position}px)`,
-      height: `${CALCULATED_HEIGHT_PERCENTAGE}%`
+      height: `${calculatedHeightPercentage}%`
     }"
   />
 </template>
