@@ -30,7 +30,7 @@ const OFFSET_Y_PX = CALCULATED_HEIGHT_PERCENTAGE / 2;
 .audio-tick {
   position: absolute;
   width: 4px;
-  background-color: #3b82f6;
+  background-color: #3bb2f6;
   right: 0;
   top: 50%;
   border-radius: 5px;
