@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useVoiceRecording } from '../composables/useVoiceRecording';
+import Wavelength from './ui/Wavelength.vue';
 
 const {
   startRecording,
@@ -55,6 +56,8 @@ const recordingExists = computed(() => {
       Discard
     </button>
     
+    <Wavelength/>
+
   </div>
 </template>
 

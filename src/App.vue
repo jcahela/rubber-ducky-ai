@@ -1,7 +1,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import RubberDucky from './components/ui/RubberDucky/RubberDucky.vue';
+import RubberDucky from './components/ui/RubberDucky.vue';
 import Menu from './components/Menu.vue';
 
 // State
