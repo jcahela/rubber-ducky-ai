@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useVoiceRecording } from '../composables/useVoiceRecording';
+import AudioMeter from './ui/AudioMeter.vue';
 
 const {
   startRecording,
@@ -54,6 +55,8 @@ const recordingExists = computed(() => {
     >
       Discard
     </button>
+
+    <AudioMeter :audioLevel="audioLevel" />
     
   </div>
 </template>
