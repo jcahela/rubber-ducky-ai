@@ -54,8 +54,12 @@ export function useVoiceRecording() {
         const filteredData = volumeArray.filter((num) => num != 0);
 
         let rawAverage = volumeArray.reduce((a, b) => a + b) / filteredData.length || 1;
-        const average = rawAverage + (rawAverage * 0.2) > 255 ? 255 : rawAverage + (rawAverage * 0.2);
-        audioLevel.value = average / 255;        
+        const average = Math.min(255, rawAverage);
+
+        const MIN_THRESHOLD = 50;  // Typical background noise level
+        const MAX_THRESHOLD = 130; // Typical max level observed
+        
+        audioLevel.value = Math.max(0, Math.min(1, (average - MIN_THRESHOLD) / (MAX_THRESHOLD - MIN_THRESHOLD)));     
         animationFrame = requestAnimationFrame(updateAudioLevel);
     }
 

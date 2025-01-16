@@ -9,11 +9,12 @@ const props = defineProps({
     required: true
   }
 })
+const MIN_LEVEL = 0.09;
+const MAX_LEVEL = 0.85;
 
-const BASE_LEVEL = 0.09;
-const AUDIO_THRESHOLD = 0.3;
-const calculatedLevel = props.level < AUDIO_THRESHOLD ? BASE_LEVEL : props.level;
-const calculatedHeightPercentage = calculatedLevel * 100;
+const roundedLevel = Math.round(props.level * 100) / 100;
+const adjustedLevel = Math.max(MIN_LEVEL, Math.min(MAX_LEVEL, Math.round(props.level * 100) / 100))
+const calculatedHeightPercentage = adjustedLevel * 100;
 </script>
 
 <template>
