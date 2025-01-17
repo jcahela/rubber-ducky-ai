@@ -51,12 +51,12 @@ const recordingExists = computed(() => {
     </button>
     <button 
       @click="discardRecording" 
-      :disabled="isRecording || !recordingExists"
+      :disabled="isRecording || !recordingExists || isAudioPlaying"
     >
       Discard
     </button>
 
-    <AudioMeter :audioLevel="audioLevel" />
+    <AudioMeter v-if="isRecording" :audioLevel="audioLevel" />
     
   </div>
 </template>
