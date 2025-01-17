@@ -83,7 +83,7 @@ const updateTicks = () => {
   ticks.value[ticks.value.length - 1].position <= -tickSpacing) {
     ticks.value.push(createTick())
   }
-  
+  // TODO: Talk about how this works at preventing jaggedness by averaging the ticks at index 1 using the levels of the surrounding ticks
   if (ticks.value[1].level < ticks.value[0].level && ticks.value[1].level < ticks.value[2].level) {
     ticks.value[1].level = (ticks.value[0].level + ticks.value[2].level) / 2;
   }
