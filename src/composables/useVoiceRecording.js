@@ -16,10 +16,14 @@ export function useVoiceRecording() {
         if (isRecording.value) return
         isRecording.value = true;
         try {
+            // Hard code preferred mic for now
+            // TODO: allow user microphone selection
+            const preferredMicrophoneId = '087fe23d3002899822038ff44b1797618e2e7363e89374c175b28ca04b901119';
             audioStream = await navigator.mediaDevices.getUserMedia({ 
                 audio: {
                     sampleRate: 16000,
-                    channelCount: 1
+                    channelCount: 1,
+                    deviceId: preferredMicrophoneId
                 }
             });
 

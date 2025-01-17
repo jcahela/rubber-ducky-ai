@@ -66,7 +66,7 @@ const showMenu = ref(false);
 }
 
 .rubber-ducky-menu {
-  height: 500px;
+  height: fit-content;
   width: 400px;
   justify-content: flex-start;
   align-items: flex-end;

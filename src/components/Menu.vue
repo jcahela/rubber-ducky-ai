@@ -23,7 +23,10 @@ const recordingExists = computed(() => {
 
 <template>
   <div class="menu">
-    <button 
+    <AudioMeter class="audio-meter" :audioLevel="audioLevel" />
+
+    <div class="controller">
+      <button 
       v-if="!isRecording" 
       @click="startRecording"
       :disabled="isRecording || recordingExists"
@@ -55,15 +58,32 @@ const recordingExists = computed(() => {
     >
       Discard
     </button>
-
-    <AudioMeter v-if="isRecording" :audioLevel="audioLevel" />
+    </div>
     
   </div>
 </template>
 
-<style scoped>
+<style lang="postcss" scoped>
 .menu {
   height: 100%;
   width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .audio-meter {
+    margin-top: 2rem;
+  }
+
+  .controller {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
 }
+
+
 </style>

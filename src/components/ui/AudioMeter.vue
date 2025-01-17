@@ -55,7 +55,7 @@ const ticks = ref([
   {id: 43, position: 0, level: 0}
 ])
 const containerWidth = 300
-const jumpSize = 7 // Size of each jump - smaller for closer ticks
+const jumpSize = 6 // Size of each jump - smaller for closer ticks
 const tickSpacing = jumpSize // Match spacing to jump size for stationary effect
 const frameInterval = 50 // Time between jumps
 
@@ -78,10 +78,14 @@ const updateTicks = () => {
     }))
     .filter(tick => tick.position > -containerWidth)
 
-  // Add new tick when the last tick has moved by exactly the tick spacing
+    
   if (ticks.value.length === 0 || 
-      ticks.value[ticks.value.length - 1].position <= -tickSpacing) {
+  ticks.value[ticks.value.length - 1].position <= -tickSpacing) {
     ticks.value.push(createTick())
+  }
+  
+  if (ticks.value[1].level < ticks.value[0].level && ticks.value[1].level < ticks.value[2].level) {
+    ticks.value[1].level = (ticks.value[0].level + ticks.value[2].level) / 2;
   }
 }
 
@@ -97,7 +101,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="audio-meter">
+  <div class="audio-meter-container">
+    <div class="audio-water">
+    </div>
     <AudioTick 
       v-for="tick in ticks"
       :key="tick.id"
@@ -108,7 +114,7 @@ onUnmounted(() => {
 </template>
 
 <style>
-.audio-meter {
+.audio-meter-container {
   position: relative;
   width: 300px;
   height: 64px;
@@ -116,5 +122,15 @@ onUnmounted(() => {
   border: 1px solid #d1d5db;
   border-radius: 4px;
   overflow: hidden;
+  border-bottom-right-radius: 50px;
+  border-bottom-left-radius: 50px;
+}
+
+.audio-water {
+  background-color: #3bb2f6;
+  height: 20px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
 }
 </style>

@@ -12,7 +12,6 @@ const props = defineProps({
 const MIN_LEVEL = 0.09;
 const MAX_LEVEL = 0.85;
 
-const roundedLevel = Math.round(props.level * 100) / 100;
 const adjustedLevel = Math.max(MIN_LEVEL, Math.min(MAX_LEVEL, Math.round(props.level * 100) / 100))
 const calculatedHeightPercentage = adjustedLevel * 100;
 </script>
@@ -33,9 +32,8 @@ const calculatedHeightPercentage = adjustedLevel * 100;
   width: 4px;
   background-color: #3bb2f6;
   right: 0;
-  top: 50%;
-  transform-origin: center;
-  translate: 0 -50%;
+  bottom: 19%;
+  border: 1px solid #3bb2f6;
   border-radius: 5px;
 }
 </style>
