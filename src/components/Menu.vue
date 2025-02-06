@@ -1,25 +1,29 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { useVoiceRecording } from '../composables/useVoiceRecording';
 import AudioMeter from './ui/AudioMeter.vue';
 
 const {
+  isRecording,
+  audioLevel,
+  isAudioPlaying,
+  recordingExists,
+  microphoneSelected,
+  selectingMicrophone,
+  selectedMicrophoneId,
+  microphones,
   startRecording,
   stopRecording,
-  isRecording,
-  getAudioBlob,
-  audioLevel,
   playbackRecording,
   discardRecording,
   pausePlayback,
-  isAudioPlaying
+  getMicrophones
 } = useVoiceRecording();
 
-const recordingExists = computed(() => {
-  return !!getAudioBlob();
-})
 
-const microphoneSelected = ref(false);
+onMounted(() => {
+  getMicrophones();
+})
 
 </script>
 
@@ -30,7 +34,7 @@ const microphoneSelected = ref(false);
     <div class="controller">
 
       <div v-if="!microphoneSelected">
-        <button @click="console.log('show modal for mic selection')">
+        <button @click="console.log('show modal for mic selection'); selectingMicrophone = true">
           Select Microphone
         </button>
       </div>
@@ -69,6 +73,16 @@ const microphoneSelected = ref(false);
           Discard
         </button>
       </div>
+
+      <div v-if="selectingMicrophone">
+        <div
+          v-for="microphone in microphones" @click="microphoneSelected = true; selectingMicrophone = false; selectedMicrophoneId = microphone.id; console.log(selectedMicrophoneId)"
+          class="microphone-selection"
+        >
+          {{  microphone.label }}
+        </div>
+
+      </div>
     </div>
     
   </div>
@@ -90,8 +104,15 @@ const microphoneSelected = ref(false);
 
   .controller {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     margin-top: 2rem;
+
+    .microphone-selection:hover {
+      cursor: pointer;
+      font-weight: bold;
+      border: 1px solid black;
+    }
   }
 
 }
