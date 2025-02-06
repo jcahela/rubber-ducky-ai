@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useVoiceRecording } from '../composables/useVoiceRecording';
 import AudioMeter from './ui/AudioMeter.vue';
 
@@ -19,6 +19,8 @@ const recordingExists = computed(() => {
   return !!getAudioBlob();
 })
 
+const microphoneSelected = ref(false);
+
 </script>
 
 <template>
@@ -26,38 +28,47 @@ const recordingExists = computed(() => {
     <AudioMeter class="audio-meter" :audioLevel="audioLevel" />
 
     <div class="controller">
-      <button 
-      v-if="!isRecording" 
-      @click="startRecording"
-      :disabled="isRecording || recordingExists"
-    >
-      Start Recording
-    </button>
-    <button 
-      v-else 
-      @click="stopRecording"
-    >
-      Stop Recording
-    </button>
-    
-    <button 
-      @click="playbackRecording" 
-      :disabled="isRecording || !recordingExists || isAudioPlaying"
-    >
-      Play
-    </button>
-    <button 
-      @click="pausePlayback"
-      :disabled="isRecording || !recordingExists || !isAudioPlaying"
-    >
-      Pause
-    </button>
-    <button 
-      @click="discardRecording" 
-      :disabled="isRecording || !recordingExists || isAudioPlaying"
-    >
-      Discard
-    </button>
+
+      <div v-if="!microphoneSelected">
+        <button @click="console.log('show modal for mic selection')">
+          Select Microphone
+        </button>
+      </div>
+
+      <div v-else>
+        <button 
+          v-if="!isRecording" 
+          @click="startRecording"
+          :disabled="isRecording || recordingExists"
+        >
+          Start Recording
+        </button>
+        <button 
+          v-else 
+          @click="stopRecording"
+        >
+          Stop Recording
+        </button>
+        
+        <button 
+          @click="playbackRecording" 
+          :disabled="isRecording || !recordingExists || isAudioPlaying"
+        >
+          Play
+        </button>
+        <button 
+          @click="pausePlayback"
+          :disabled="isRecording || !recordingExists || !isAudioPlaying"
+        >
+          Pause
+        </button>
+        <button 
+          @click="discardRecording" 
+          :disabled="isRecording || !recordingExists || isAudioPlaying"
+        >
+          Discard
+        </button>
+      </div>
     </div>
     
   </div>
