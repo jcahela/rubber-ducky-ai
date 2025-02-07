@@ -1,15 +1,10 @@
-import { ref, onUnmounted, computed } from 'vue'
+import { ref, onUnmounted } from 'vue'
 
 export function useVoiceRecording() {
     const isRecording = ref(false)
     const isAudioPlaying = ref(false)
     const audioChunks = ref([])
-    const audioLevel = ref(0);      
-    const microphoneSelected = ref(false);
-    const selectingMicrophone = ref(false);
-    const selectedMicrophoneId = ref(null);
-    const microphones = ref([]);
-
+    const audioLevel = ref(0);
     let mediaRecorder = null
     let audioStream = null
     let audioContext = null
@@ -17,25 +12,18 @@ export function useVoiceRecording() {
     let animationFrame = null
     let audio = null
 
-    const recordingExists = computed(() => {
-        return !!getAudioBlob();
-      })
-      
-    const getMicrophones = async () => {
-        microphones.value = (await navigator.mediaDevices.enumerateDevices())
-            .filter(device => device.kind === 'audiooutput')
-            .map(mic => ({label: mic.label, id: mic.deviceId}));
-    }
-
     const startRecording = async () => {
         if (isRecording.value) return
         isRecording.value = true;
         try {
+            // Hard code preferred mic for now
+            // TODO: allow user microphone selection
+            const preferredMicrophoneId = '087fe23d3002899822038ff44b1797618e2e7363e89374c175b28ca04b901119';
             audioStream = await navigator.mediaDevices.getUserMedia({ 
                 audio: {
                     sampleRate: 16000,
                     channelCount: 1,
-                    deviceId: selectedMicrophoneId
+                    deviceId: preferredMicrophoneId
                 }
             });
 
@@ -142,17 +130,11 @@ export function useVoiceRecording() {
         isRecording,
         audioLevel,
         isAudioPlaying,
-        microphoneSelected,
-        selectingMicrophone,
-        selectedMicrophoneId,
-        microphones,
-        recordingExists,
         startRecording,
         stopRecording,
         getAudioBlob,
         discardRecording,
         playbackRecording,
-        pausePlayback,
-        getMicrophones
+        pausePlayback
     }
 }
