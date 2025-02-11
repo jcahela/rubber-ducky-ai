@@ -1,4 +1,4 @@
-import { ref, onUnmounted } from 'vue'
+import { ref, onUnmounted, computed } from 'vue'
 
 export function useVoiceRecording() {
     const isRecording = ref(false)
@@ -11,6 +11,11 @@ export function useVoiceRecording() {
     let analyser = null
     let animationFrame = null
     let audio = null
+
+    const audioBlob = computed(() => {
+        if (audioChunks.value.length === 0) return null
+        return new Blob(audioChunks.value, { type: 'audio/webm' })
+    })
 
     const startRecording = async () => {
         if (isRecording.value) return
@@ -85,11 +90,6 @@ export function useVoiceRecording() {
         }
     }
 
-    const getAudioBlob = () => {
-        if (audioChunks.value.length === 0) return null
-        return new Blob(audioChunks.value, { type: 'audio/webm' })
-    }
-
     const playbackRecording = () => {
         isAudioPlaying.value = true;
         if (audio) {
@@ -130,9 +130,9 @@ export function useVoiceRecording() {
         isRecording,
         audioLevel,
         isAudioPlaying,
+        audioBlob,
         startRecording,
         stopRecording,
-        getAudioBlob,
         discardRecording,
         playbackRecording,
         pausePlayback
