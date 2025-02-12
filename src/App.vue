@@ -2,24 +2,24 @@
 <script setup>
 import { ref } from 'vue';
 import RubberDucky from './components/ui/RubberDucky.vue';
-import Menu from './components/Menu.vue';
+import Controller from './components/Controller.vue';
 
 // State
-const showMenu = ref(false);
+const showController = ref(false);
 
 </script>
 
 <template>
-  <div class="rubber-ducky-container" :class="{ 'rubber-ducky-container-menu': showMenu }">
+  <div class="rubber-ducky-container" :class="{ 'rubber-ducky-container-menu': showController }">
 
-    <div class="rubber-ducky" :class="{ 'rubber-ducky-menu': showMenu }">
+    <div class="rubber-ducky" :class="{ 'rubber-ducky-menu': showController }">
       <RubberDucky
         width="75px"
         height="75px"
-        :backgroundColor="showMenu ? 'transparent' : '#FFFFFF'"
-        @click="showMenu = !showMenu"
+        :backgroundColor="showController ? 'transparent' : '#FFFFFF'"
+        @click="showController = !showController"
       />
-      <Menu v-if="showMenu"/>
+      <Controller v-if="showController"/>
     </div>
 
   </div>
