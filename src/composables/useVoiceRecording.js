@@ -12,6 +12,10 @@ export function useVoiceRecording() {
     let animationFrame = null
     let audio = null
 
+    const onAudioEnded = () => {
+        isAudioPlaying.value = false;
+    }
+
     const audioBlob = computed(() => {
         if (audioChunks.value.length === 0) return null
         return new Blob(audioChunks.value, { type: 'audio/webm' })
@@ -92,14 +96,9 @@ export function useVoiceRecording() {
 
     const playbackRecording = () => {
         isAudioPlaying.value = true;
-        if (audio) {
-            audio.play();
-            updateAudioLevel();
-            return;
-        }
-        audio = new Audio(URL.createObjectURL(getAudioBlob()));
+        if (!audio) audio = new Audio(URL.createObjectURL(audioBlob.value));
         audio.play();
-        updateAudioLevel();
+        audio.addEventListener('ended', onAudioEnded);
     }
 
     const pausePlayback = () => {
@@ -124,6 +123,11 @@ export function useVoiceRecording() {
         mediaRecorder = null;
         audioChunks.value = [];
         audioLevel.value = 0;
+        if (audio) {
+            audio.removeEventListener('ended', onAudioEnded);
+            audio.pause();
+            audio = null;
+        }
     })
 
     return {
