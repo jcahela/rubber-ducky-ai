@@ -42,7 +42,7 @@ export function useVoiceRecording() {
             analyser.fftSize = 256;
             source.connect(analyser);
             
-            mediaRecorder = new MediaRecorder(audioStream);
+            mediaRecorder = new MediaRecorder(audioStream, { mimeType: 'audio/webm'});
             audioChunks.value = [];
 
             mediaRecorder.ondataavailable = (event) => {
