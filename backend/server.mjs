@@ -25,6 +25,8 @@ app.post('/transcribe', upload.single('audio'), async (req, res) => {
 
     const audioFile = new File([file.buffer], 'audio.webm', { type: file.mimetype });
 
+    return res.json({ transcription: 'Comment this out to use transcription API'})
+
     const transcription = await openai.audio.transcriptions.create({
       file: audioFile,
       model: 'whisper-1',
