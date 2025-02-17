@@ -21,11 +21,9 @@ async function handleTranscribe() {
   if (!audioBlob.value) return
 
   try {
-    // Convert the audio blob to FormData
     const formData = new FormData();
     formData.append('audio', audioBlob.value, 'audio.webm');
 
-    // Send the audio blob to your backend
     const response = await fetch('http://localhost:3001/transcribe', {
       method: 'POST',
       body: formData,
@@ -35,7 +33,6 @@ async function handleTranscribe() {
       throw new Error('Failed to transcribe audio');
     }
 
-    // Parse the response JSON
     const { transcription: result } = await response.json();
     transcription.value = result;
 
