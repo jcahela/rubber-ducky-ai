@@ -1,25 +1,26 @@
 import { ref, onUnmounted, computed } from 'vue'
 
+const isRecording = ref(false);
+const isAudioPlaying = ref(false);
+const audioChunks = ref([]);
+const audioLevel = ref(0);
+
+const audioBlob = computed(() => {
+    if (audioChunks.value.length === 0) return null;
+    return new Blob(audioChunks.value, { type: 'audio/webm' });
+});
+
 export function useVoiceRecording() {
-    const isRecording = ref(false)
-    const isAudioPlaying = ref(false)
-    const audioChunks = ref([])
-    const audioLevel = ref(0);
-    let mediaRecorder = null
-    let audioStream = null
-    let audioContext = null
-    let analyser = null
-    let animationFrame = null
-    let audio = null
+    let mediaRecorder = null;
+    let audioStream = null;
+    let audioContext = null;
+    let analyser = null;
+    let animationFrame = null;
+    let audio = null;
 
     const onAudioEnded = () => {
         isAudioPlaying.value = false;
     }
-
-    const audioBlob = computed(() => {
-        if (audioChunks.value.length === 0) return null
-        return new Blob(audioChunks.value, { type: 'audio/webm' })
-    })
 
     const startRecording = async () => {
         if (isRecording.value) return
@@ -96,7 +97,7 @@ export function useVoiceRecording() {
 
     const playbackRecording = () => {
         isAudioPlaying.value = true;
-        if (!audio) audio = new Audio(URL.createObjectURL(audioBlob.value));
+        audio = new Audio(URL.createObjectURL(audioBlob.value));
         audio.play();
         audio.addEventListener('ended', onAudioEnded);
     }
@@ -110,7 +111,6 @@ export function useVoiceRecording() {
     }
 
     const discardRecording = () => {
-        // TODO: Fix this, it's not actually discarding?
         audioChunks.value = [];
         audioLevel.value = 0;
     }
