@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { useVoiceRecording } from '../composables/useVoiceRecording';
 import AudioMeter from './ui/AudioMeter.vue';
+import MicrophoneIcon from './ui/MicrophoneIcon.vue';
 
 const {
   startRecording,
@@ -46,52 +47,65 @@ async function handleTranscribe() {
 
 <template>
   <div class="menu">
-    <AudioMeter class="audio-meter" :audioLevel="audioLevel" />
-
-    <div class="controller">
-      <button 
-      v-if="!isRecording" 
-      @click="startRecording"
-      :disabled="isRecording || audioBlob"
-    >
-      Start Recording
-    </button>
-    <button 
-      v-else 
-      @click="stopRecording"
-    >
-      Stop Recording
-    </button>
-    
-    <button 
-      @click="playbackRecording" 
-      :disabled="isRecording || !audioBlob || isAudioPlaying"
-    >
-      Play
-    </button>
-    <button 
-      @click="pausePlayback"
-      :disabled="isRecording || !audioBlob || !isAudioPlaying"
-    >
-      Pause
-    </button>
-    <button 
-      @click="discardRecording" 
-      :disabled="isRecording || !audioBlob || isAudioPlaying"
-    >
-      Discard
-    </button>
-
-    <button 
-      @click="handleTranscribe" 
-      :disabled="isRecording || !audioBlob || isAudioPlaying"
-    >
-      Transcribe
-    </button>
-
-    <p>Transcription: {{ transcription }}</p>
+    <div>
+      <p>
+        1. Press the microphone icon to start recording.
+      </p>
+      
+      <p>
+        2. Press it again to stop recording.
+      </p>
     </div>
-    
+
+    <!-- TODO: implement glowing orange dot to denote it's recording -->
+    <MicrophoneIcon   
+      width="50px"
+      height="50px"
+      :fillMicrophone="isRecording"
+      @click="isRecording ? stopRecording() : startRecording()"
+    />
+
+    <AudioMeter
+      v-if="isRecording || audioBlob"
+      class="audio-meter"
+      :audioLevel="audioLevel"
+    />
+
+    <div
+      v-if="isRecording || audioBlob"
+      class="controller"
+    >
+      
+      <button 
+        @click="playbackRecording" 
+        :disabled="isRecording || !audioBlob || isAudioPlaying"
+      >
+        Play
+      </button>
+      <button 
+        @click="pausePlayback"
+        :disabled="isRecording || !audioBlob || !isAudioPlaying"
+      >
+        Pause
+      </button>
+      <button 
+        @click="discardRecording" 
+        :disabled="isRecording || !audioBlob || isAudioPlaying"
+      >
+        Discard
+      </button>
+
+      <button 
+        @click="handleTranscribe" 
+        :disabled="isRecording || !audioBlob || isAudioPlaying"
+      >
+        Transcribe
+      </button>
+
+      <p v-if="transcription">Transcription: {{ transcription }}</p>
+    </div>
+
+      
   </div>
 </template>
 
@@ -110,8 +124,9 @@ async function handleTranscribe() {
   }
 
   .controller {
+    box-sizing: border-box;
     display: flex;
-    justify-content: center;
+    align-items: center;
     margin-top: 2rem;
   }
 

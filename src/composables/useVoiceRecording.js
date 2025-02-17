@@ -110,6 +110,7 @@ export function useVoiceRecording() {
     }
 
     const discardRecording = () => {
+        // TODO: Fix this, it's not actually discarding?
         audioChunks.value = [];
         audioLevel.value = 0;
     }
