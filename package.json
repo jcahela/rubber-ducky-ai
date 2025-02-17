@@ -5,8 +5,8 @@
   "scripts": {
     "build": "vue-cli-service build --no-clean",
     "build-watch": "vue-cli-service build --watch --no-clean",
-    "dev": "vue-cli-service serve",
-    "back-dev": "node backend/server.mjs"
+    "front-serve": "vue-cli-service serve",
+    "back-serve": "node backend/server.mjs"
   },
   "dependencies": {
     "vue": "^3.3.0"
