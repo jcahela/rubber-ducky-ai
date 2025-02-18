@@ -1,21 +1,18 @@
 import { ref, onUnmounted, computed } from 'vue'
 
 const isRecording = ref(false);
-const isAudioPlaying = ref(false);
 const audioChunks = ref([]);
 const audioLevel = ref(0);
-const durationInSeconds = ref(0);
 
 const audioBlob = computed(() => {
     if (audioChunks.value.length === 0) return null;
     return new Blob(audioChunks.value, { type: 'audio/webm' });
 });
 
-const duration = computed(() => {
-    const seconds = Math.round(durationInSeconds.value);
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+const audioUrl = computed(() => {
+    if (audioChunks.value.length === 0) return null;
+    const waveFile = new Blob(audioChunks.value, { type: 'audio/wav' });
+    return URL.createObjectURL(waveFile);
 });
 
 export function useVoiceRecording() {
@@ -25,10 +22,6 @@ export function useVoiceRecording() {
     let analyser = null;
     let animationFrame = null;
     let audio = null;
-
-    const onAudioEnded = () => {
-        isAudioPlaying.value = false;
-    }
 
     const startRecording = async () => {
         if (isRecording.value) return
@@ -100,35 +93,12 @@ export function useVoiceRecording() {
                 cancelAnimationFrame(animationFrame);
             }
             audioLevel.value = 0;
-
-            const blob = new Blob(audioChunks.value, { type: 'audio/webm' });
-            const arrayBuffer = await blob.arrayBuffer();
-            const audioContextForDecoding = new AudioContext();
-            const decodedData = await audioContextForDecoding.decodeAudioData(arrayBuffer);
-            durationInSeconds.value = decodedData.duration;
-            audioContextForDecoding.close();
-        }
-    }
-
-    const playbackRecording = () => {
-        isAudioPlaying.value = true;
-        audio = new Audio(URL.createObjectURL(audioBlob.value));
-        audio.play();
-        audio.addEventListener('ended', onAudioEnded);
-    }
-
-    const pausePlayback = () => {
-        if (audio) {
-            audio.pause();
-            cancelAnimationFrame(animationFrame);
-            isAudioPlaying.value = false;
         }
     }
 
     const discardRecording = () => {
         audioChunks.value = [];
         audioLevel.value = 0;
-        durationInSeconds.value = 0;
     }
 
     onUnmounted(() => {
@@ -140,9 +110,7 @@ export function useVoiceRecording() {
         mediaRecorder = null;
         audioChunks.value = [];
         audioLevel.value = 0;
-        durationInSeconds.value = 0;
         if (audio) {
-            audio.removeEventListener('ended', onAudioEnded);
             audio.pause();
             audio = null;
         }
@@ -151,13 +119,10 @@ export function useVoiceRecording() {
     return {
         isRecording,
         audioLevel,
-        isAudioPlaying,
         audioBlob,
-        duration,
+        audioUrl,
         startRecording,
         stopRecording,
-        discardRecording,
-        playbackRecording,
-        pausePlayback
+        discardRecording
     }
 }

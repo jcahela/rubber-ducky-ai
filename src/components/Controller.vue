@@ -1,23 +1,24 @@
 <script setup>
-import { ref } from 'vue';
+import WaveSurfer from 'wavesurfer.js';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useVoiceRecording } from '../composables/useVoiceRecording';
 import AudioMeter from './ui/AudioMeter.vue';
 import DuckyWithSpeechBubble from './RubberDucky/DuckyWithSpeechBubble.vue';
 
 const {
   isRecording,
-  isAudioPlaying,
   audioLevel,
   audioBlob,
-  duration,
+  audioUrl,
   startRecording,
   stopRecording,
-  playbackRecording,
-  discardRecording,
-  pausePlayback,
+  discardRecording
 } = useVoiceRecording();
 
 const transcription = ref('');
+const wavesurfer = ref(null);
+const currentTime = ref('0.00');
+const duration = ref(null);
 
 async function handleTranscribe() {
   if (!audioBlob.value) return
@@ -51,6 +52,47 @@ function toggleRecording() {
     startRecording();
   }
 }
+
+onMounted(() => {
+  wavesurfer.value = WaveSurfer.create({
+    container: '#waveform',
+    waveColor: '#3bb2f6',
+    progressColor: '#1a7bbf',
+    url: audioUrl.value,
+    height: '60',
+    cursorColor: '#ddd5e9',
+    dragToSeek: true,
+    cursorWidth: 2
+  });
+  
+  wavesurfer.value.on('click', () => {
+    currentTime.value = wavesurfer.value.getCurrentTime().toFixed(2);
+  });
+
+  wavesurfer.value.on('dragend', () => {
+    currentTime.value = wavesurfer.value.getCurrentTime().toFixed(2);
+  });
+
+  wavesurfer.value.on('play', () => {
+    currentTime.value = wavesurfer.value.getCurrentTime().toFixed(2);
+  })
+
+  wavesurfer.value.on('ready', () => {
+    duration.value = wavesurfer.value.getDuration();
+  });
+});
+
+onUnmounted(() => {
+  if (wavesurfer.value) {
+    wavesurfer.value.destroy();
+  }
+});
+
+watch(audioUrl, (newUrl) => {
+  if (newUrl && wavesurfer.value) {
+    wavesurfer.value.load(newUrl);
+  }
+});
 </script>
 
 <template>
@@ -82,45 +124,32 @@ function toggleRecording() {
       class="audio-meter"
       :audioLevel="audioLevel"
     />
-
-    <div v-if="!isRecording && audioBlob && duration">
-      0:00 / {{ duration }}
+    <div
+      v-show="!isRecording && audioUrl"
+      id="waveform"
+    >
     </div>
 
 
     <div
-      v-if="!isRecording && audioBlob"
+      v-if="!isRecording && wavesurfer && audioBlob"
       class="controller"
     >
-      
-      <button 
-        @click="playbackRecording" 
-        :disabled="!audioBlob || isAudioPlaying"
-      >
-        Play
+      <button @click="wavesurfer.playPause">
+        Play/Pause
       </button>
-      <button 
-        @click="pausePlayback"
-        :disabled="!audioBlob || !isAudioPlaying"
-      >
-        Pause
-      </button>
-      <button 
-        @click="discardRecording" 
-        :disabled="!audioBlob || isAudioPlaying"
-      >
+
+      {{ currentTime }} / {{ duration }}
+
+      <button @click="discardRecording">
         Discard
       </button>
 
-      <button 
-        @click="handleTranscribe" 
-        :disabled="!audioBlob || isAudioPlaying"
-      >
+      <button @click="handleTranscribe">
         Transcribe
       </button>
     </div>
 
-      
   </div>
 </template>
 
@@ -143,6 +172,11 @@ function toggleRecording() {
     display: flex;
     align-items: center;
     margin-top: 1rem;
+  }
+
+  #waveform {
+    border: 1px solid black;
+    width: 100%;
   }
 
 }
