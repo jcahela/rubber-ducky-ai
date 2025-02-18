@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useVoiceRecording } from '../composables/useVoiceRecording';
 import AudioMeter from './ui/AudioMeter.vue';
-import MicrophoneIcon from './ui/MicrophoneIcon.vue';
+import DuckyWithSpeechBubble from './RubberDucky/DuckyWithSpeechBubble.vue';
 
 const {
   startRecording,
@@ -43,28 +43,39 @@ async function handleTranscribe() {
   }
 }
 
+function toggleRecording() {
+  if (isRecording.value) {
+    stopRecording();
+  } else {
+    startRecording();
+  }
+}
 </script>
 
 <template>
   <div class="menu">
-    <div>
-      <p>
-        1. Press the microphone icon to start recording.
-      </p>
-      
-      <p>
-        2. Press it again to stop recording.
-      </p>
-    </div>
+    <DuckyWithSpeechBubble :onDuckyClick="toggleRecording">
+      <div v-if="transcription">
+        {{ transcription }}
+      </div>
 
-    <!-- TODO: implement glowing orange dot to denote it's recording -->
-    <MicrophoneIcon   
-      width="50px"
-      height="50px"
-      :fillMicrophone="isRecording"
-      @click="isRecording ? stopRecording() : startRecording()"
-    />
-
+      <div v-else>
+        <div v-if="!isRecording && !audioBlob">
+          <p>1. Click me to start recording</p>
+          <p>2. Click me again to stop recording</p>
+        </div>
+  
+        <div v-else-if="isRecording">
+          <p style="text-align: center;">I'm listening!</p>
+          <p style="text-align: center;">Click me again to stop recording</p>
+        </div>
+  
+        <div v-else-if="audioBlob">
+          <p>I've saved your wonderful recording!</p>
+        </div>
+      </div>
+    </DuckyWithSpeechBubble>
+    
     <AudioMeter
       v-if="isRecording || audioBlob"
       class="audio-meter"
@@ -101,8 +112,6 @@ async function handleTranscribe() {
       >
         Transcribe
       </button>
-
-      <p v-if="transcription">Transcription: {{ transcription }}</p>
     </div>
 
       
@@ -120,7 +129,7 @@ async function handleTranscribe() {
   align-items: center;
 
   .audio-meter {
-    margin-top: 2rem;
+    margin-top: -14px;
   }
 
   .controller {

@@ -1,7 +1,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import RubberDucky from './components/ui/RubberDucky.vue';
+import RubberDucky from './components/RubberDucky/RubberDuckyIcon.vue';
 import Controller from './components/Controller.vue';
 import { useVoiceRecording } from './composables/useVoiceRecording';
 
@@ -19,11 +19,11 @@ const {
 
     <div class="rubber-ducky" :class="{ 'rubber-ducky-menu': showController }">
       <RubberDucky
+        v-if="!showController"
         width="75px"
         height="75px"
-        :backgroundColor="showController ? 'transparent' : '#FFFFFF'"
         :showSpeechBubble="isRecording"
-        @click="showController = !showController"
+        @click="showController = true"
       />
       <Controller v-if="showController"/>
     </div>
