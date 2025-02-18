@@ -5,12 +5,13 @@ import AudioMeter from './ui/AudioMeter.vue';
 import DuckyWithSpeechBubble from './RubberDucky/DuckyWithSpeechBubble.vue';
 
 const {
-  startRecording,
-  stopRecording,
   isRecording,
   isAudioPlaying,
   audioLevel,
   audioBlob,
+  duration,
+  startRecording,
+  stopRecording,
   playbackRecording,
   discardRecording,
   pausePlayback,
@@ -77,38 +78,43 @@ function toggleRecording() {
     </DuckyWithSpeechBubble>
     
     <AudioMeter
-      v-if="isRecording || audioBlob"
+      v-if="isRecording"
       class="audio-meter"
       :audioLevel="audioLevel"
     />
 
+    <div v-if="!isRecording && audioBlob && duration">
+      0:00 / {{ duration }}
+    </div>
+
+
     <div
-      v-if="isRecording || audioBlob"
+      v-if="!isRecording && audioBlob"
       class="controller"
     >
       
       <button 
         @click="playbackRecording" 
-        :disabled="isRecording || !audioBlob || isAudioPlaying"
+        :disabled="!audioBlob || isAudioPlaying"
       >
         Play
       </button>
       <button 
         @click="pausePlayback"
-        :disabled="isRecording || !audioBlob || !isAudioPlaying"
+        :disabled="!audioBlob || !isAudioPlaying"
       >
         Pause
       </button>
       <button 
         @click="discardRecording" 
-        :disabled="isRecording || !audioBlob || isAudioPlaying"
+        :disabled="!audioBlob || isAudioPlaying"
       >
         Discard
       </button>
 
       <button 
         @click="handleTranscribe" 
-        :disabled="isRecording || !audioBlob || isAudioPlaying"
+        :disabled="!audioBlob || isAudioPlaying"
       >
         Transcribe
       </button>
@@ -136,7 +142,7 @@ function toggleRecording() {
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    margin-top: 2rem;
+    margin-top: 1rem;
   }
 
 }
