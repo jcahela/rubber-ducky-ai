@@ -1,5 +1,6 @@
 <script setup>
 import WaveSurfer from 'wavesurfer.js';
+import Hover from 'wavesurfer.js/dist/plugins/hover.esm.js';
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useVoiceRecording } from '../composables/useVoiceRecording';
 import AudioMeter from './ui/AudioMeter.vue';
@@ -17,8 +18,6 @@ const {
 
 const transcription = ref('');
 const wavesurfer = ref(null);
-const currentTime = ref('0.00');
-const duration = ref(null);
 
 async function handleTranscribe() {
   if (!audioBlob.value) return
@@ -58,27 +57,21 @@ onMounted(() => {
     container: '#waveform',
     waveColor: '#3bb2f6',
     progressColor: '#1a7bbf',
+    cursorColor: '#0e5a94',
     url: audioUrl.value,
     height: '60',
-    cursorColor: '#ddd5e9',
+    barHeight: 3,
     dragToSeek: true,
-    cursorWidth: 2
-  });
-  
-  wavesurfer.value.on('click', () => {
-    currentTime.value = wavesurfer.value.getCurrentTime().toFixed(2);
-  });
-
-  wavesurfer.value.on('dragend', () => {
-    currentTime.value = wavesurfer.value.getCurrentTime().toFixed(2);
-  });
-
-  wavesurfer.value.on('play', () => {
-    currentTime.value = wavesurfer.value.getCurrentTime().toFixed(2);
-  })
-
-  wavesurfer.value.on('ready', () => {
-    duration.value = wavesurfer.value.getDuration();
+    cursorWidth: 2,
+    plugins: [
+      Hover.create({
+        lineColor: '#ff6b6b',
+        labelBackground: '#2f2f2f',
+        labelColor: '#ffffff',
+        lineWidth: 2,
+        labelSize: '11px',
+      })
+    ]
   });
 });
 
@@ -139,8 +132,6 @@ watch(audioUrl, (newUrl) => {
         Play/Pause
       </button>
 
-      {{ currentTime }} / {{ duration }}
-
       <button @click="discardRecording">
         Discard
       </button>
@@ -175,7 +166,8 @@ watch(audioUrl, (newUrl) => {
   }
 
   #waveform {
-    border: 1px solid black;
+    border: 1px solid rgb(116, 116, 116);
+    border-radius: 5px;
     width: 100%;
   }
 
