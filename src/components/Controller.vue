@@ -1,9 +1,8 @@
 <script setup>
-import WaveSurfer from 'wavesurfer.js';
-import Hover from 'wavesurfer.js/dist/plugins/hover.esm.js';
-import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { ref } from 'vue';
 import { useVoiceRecording } from '../composables/useVoiceRecording';
 import AudioMeter from './ui/AudioMeter.vue';
+import WaveForm from './ui/WaveForm.vue';
 import DuckyWithSpeechBubble from './RubberDucky/DuckyWithSpeechBubble.vue';
 
 const {
@@ -17,7 +16,6 @@ const {
 } = useVoiceRecording();
 
 const transcription = ref('');
-const wavesurfer = ref(null);
 
 async function handleTranscribe() {
   if (!audioBlob.value) return
@@ -51,41 +49,6 @@ function toggleRecording() {
     startRecording();
   }
 }
-
-onMounted(() => {
-  wavesurfer.value = WaveSurfer.create({
-    container: '#waveform',
-    waveColor: '#3bb2f6',
-    progressColor: '#1a7bbf',
-    cursorColor: '#0e5a94',
-    url: audioUrl.value,
-    height: '60',
-    barHeight: 3,
-    dragToSeek: true,
-    cursorWidth: 2,
-    plugins: [
-      Hover.create({
-        lineColor: '#ff6b6b',
-        labelBackground: '#2f2f2f',
-        labelColor: '#ffffff',
-        lineWidth: 2,
-        labelSize: '11px',
-      })
-    ]
-  });
-});
-
-onUnmounted(() => {
-  if (wavesurfer.value) {
-    wavesurfer.value.destroy();
-  }
-});
-
-watch(audioUrl, (newUrl) => {
-  if (newUrl && wavesurfer.value) {
-    wavesurfer.value.load(newUrl);
-  }
-});
 </script>
 
 <template>
@@ -117,15 +80,11 @@ watch(audioUrl, (newUrl) => {
       class="audio-meter"
       :audioLevel="audioLevel"
     />
-    <div
-      v-show="!isRecording && audioUrl"
-      id="waveform"
-    >
-    </div>
 
+    <WaveForm v-show="!isRecording && audioUrl"/>
 
     <div
-      v-if="!isRecording && wavesurfer && audioBlob"
+      v-if="!isRecording && audioBlob"
       class="controller"
     >
       <button @click="wavesurfer.playPause">
@@ -164,13 +123,6 @@ watch(audioUrl, (newUrl) => {
     align-items: center;
     margin-top: 1rem;
   }
-
-  #waveform {
-    border: 1px solid rgb(116, 116, 116);
-    border-radius: 5px;
-    width: 100%;
-  }
-
 }
 
 
