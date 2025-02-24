@@ -19,6 +19,7 @@ const {
 const transcription = ref('');
 const allAudioInputDevices = ref([]);
 const selectedMicrophone = ref({});
+const showSelectMicrophone = ref(false);
 
 async function handleTranscribe() {
   if (!audioBlob.value) return
@@ -116,24 +117,27 @@ watch(preferredMicrophoneId, (newPreferredMicrophoneId) => {
       </button>
     </div>
 
-    <div class="default-mic">
-      
-      Selected Microphone:<br/> {{ selectedMicrophone.label }}
-    </div>
+    <p class="change-mic-collapsed" @click="showSelectMicrophone = !showSelectMicrophone">Change selected microphone</p>
 
-    <br/>
-    
-    <div class="microphone-list">
-      Microphones:
-      <select v-model="preferredMicrophoneId">
-        <option
-          v-for="microphone in allAudioInputDevices"
-          :value="microphone.deviceId"
-          :selected="microphone.deviceId === selectedMicrophone.deviceId"
-        >
-          {{ microphone.label }}
-        </option>
-      </select>
+    <div v-if="showSelectMicrophone">
+      <div class="default-mic">
+        Selected Microphone:<br/> {{ selectedMicrophone.label }}
+      </div>
+  
+      <br/>
+      
+      <div class="microphone-list">
+        Microphones:
+        <select v-model="preferredMicrophoneId">
+          <option
+            v-for="microphone in allAudioInputDevices"
+            :value="microphone.deviceId"
+            :selected="microphone.deviceId === selectedMicrophone.deviceId"
+          >
+            {{ microphone.label }}
+          </option>
+        </select>
+      </div>
     </div>
 
   </div>
@@ -158,6 +162,21 @@ watch(preferredMicrophoneId, (newPreferredMicrophoneId) => {
     display: flex;
     align-items: center;
     margin-top: 1rem;
+  }
+
+  .change-mic-collapsed {
+    width: fit-content;
+    text-decoration: underline;
+    font-size: 14px;
+    margin-right: auto;
+  }
+
+  .change-mic-collapsed:hover {
+    cursor: pointer;
+  }
+
+  .default-mic {
+    width: 100%;
   }
 }
 
