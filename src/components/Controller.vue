@@ -104,10 +104,6 @@ watch(preferredMicrophoneId, (newPreferredMicrophoneId) => {
       v-if="!isRecording && audioBlob"
       class="controller"
     >
-      <button @click="wavesurfer.playPause">
-        Play/Pause
-      </button>
-
       <button @click="discardRecording">
         Discard
       </button>
@@ -120,12 +116,6 @@ watch(preferredMicrophoneId, (newPreferredMicrophoneId) => {
     <p class="change-mic-collapsed" @click="showSelectMicrophone = !showSelectMicrophone">Change selected microphone</p>
 
     <div v-if="showSelectMicrophone">
-      <div class="default-mic">
-        Selected Microphone:<br/> {{ selectedMicrophone.label }}
-      </div>
-  
-      <br/>
-      
       <div class="microphone-list">
         Microphones:
         <select v-model="preferredMicrophoneId">
@@ -138,6 +128,12 @@ watch(preferredMicrophoneId, (newPreferredMicrophoneId) => {
           </option>
         </select>
       </div>
+
+      <br/>
+    </div>
+
+    <div class="default-mic">
+      Selected Microphone:<br/> {{ selectedMicrophone.label }}
     </div>
 
   </div>
