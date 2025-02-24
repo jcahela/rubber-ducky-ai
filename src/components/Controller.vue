@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useVoiceRecording } from '../composables/useVoiceRecording';
 import AudioMeter from './ui/AudioMeter.vue';
 import WaveForm from './ui/WaveForm.vue';
@@ -10,12 +10,15 @@ const {
   audioLevel,
   audioBlob,
   audioUrl,
+  preferredMicrophoneId,
   startRecording,
   stopRecording,
   discardRecording
 } = useVoiceRecording();
 
 const transcription = ref('');
+const allAudioInputDevices = ref([]);
+const selectedMicrophone = ref({});
 
 async function handleTranscribe() {
   if (!audioBlob.value) return
@@ -49,6 +52,19 @@ function toggleRecording() {
     startRecording();
   }
 }
+
+onMounted(async () => {
+  allAudioInputDevices.value = (await navigator.mediaDevices.enumerateDevices())
+    .filter((device) => device.kind === 'audioinput' && !device.label.toLowerCase().includes('virtual'))
+    .map((physicalAudioDevice) => ({ label: physicalAudioDevice.label, deviceId: physicalAudioDevice.deviceId }));
+
+  selectedMicrophone.value = allAudioInputDevices.value.find((device) => device.deviceId === 'default');
+});
+
+watch(preferredMicrophoneId, (newPreferredMicrophoneId) => {
+  const newMicrophone = allAudioInputDevices.value.find((mic) => mic.deviceId === newPreferredMicrophoneId)
+  selectedMicrophone.value = newMicrophone;
+});
 </script>
 
 <template>
@@ -98,6 +114,26 @@ function toggleRecording() {
       <button @click="handleTranscribe">
         Transcribe
       </button>
+    </div>
+
+    <div class="default-mic">
+      
+      Selected Microphone:<br/> {{ selectedMicrophone.label }}
+    </div>
+
+    <br/>
+    
+    <div class="microphone-list">
+      Microphones:
+      <select v-model="preferredMicrophoneId">
+        <option
+          v-for="microphone in allAudioInputDevices"
+          :value="microphone.deviceId"
+          :selected="microphone.deviceId === selectedMicrophone.deviceId"
+        >
+          {{ microphone.label }}
+        </option>
+      </select>
     </div>
 
   </div>

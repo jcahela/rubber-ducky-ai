@@ -3,6 +3,7 @@ import { ref, onUnmounted, computed } from 'vue'
 const isRecording = ref(false);
 const audioChunks = ref([]);
 const audioLevel = ref(0);
+const preferredMicrophoneId = ref('default');
 
 const audioBlob = computed(() => {
     if (audioChunks.value.length === 0) return null;
@@ -27,14 +28,11 @@ export function useVoiceRecording() {
         if (isRecording.value) return
         isRecording.value = true;
         try {
-            // Hard code preferred mic for now
-            // TODO: allow user microphone selection
-            const preferredMicrophoneId = '087fe23d3002899822038ff44b1797618e2e7363e89374c175b28ca04b901119';
             audioStream = await navigator.mediaDevices.getUserMedia({ 
                 audio: {
                     sampleRate: 16000,
                     channelCount: 1,
-                    deviceId: preferredMicrophoneId
+                    deviceId: preferredMicrophoneId.value
                 }
             });
 
@@ -117,6 +115,7 @@ export function useVoiceRecording() {
         audioLevel,
         audioBlob,
         audioUrl,
+        preferredMicrophoneId,
         startRecording,
         stopRecording,
         discardRecording
