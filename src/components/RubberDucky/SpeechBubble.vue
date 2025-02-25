@@ -1,9 +1,11 @@
 <template>
   <div class="speech-bubble">
-    <slot>
-      <p style="text-align: center">Hi! I'm ducky!</p>
-      <p style="text-align: center">I'm ready to listen!</p>
-    </slot>
+    <div class="content">
+      <slot>
+        <p style="text-align: center">Hi! I'm ducky!</p>
+        <p style="text-align: center">I'm ready to listen!</p>
+      </slot>
+    </div>
   </div>
 </template>
 
@@ -17,6 +19,15 @@
   min-width: 200px;
   margin: 20px;
   margin-bottom: 10px;
+  max-height: 40vh;
+  display: flex;
+  flex-direction: column;
+
+  .content {
+    overflow-y: auto;
+    height: 100%;
+    padding-right: 10px;
+  }
 }
 
 .speech-bubble::before {
