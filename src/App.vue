@@ -4,6 +4,7 @@ import { ref } from 'vue';
 import RubberDucky from './components/RubberDucky/RubberDuckyIcon.vue';
 import Controller from './components/Controller.vue';
 import { useVoiceRecording } from './composables/useVoiceRecording';
+import MinimizeIcon from './components/ui/MinimizeIcon.vue';
 
 // State
 const showController = ref(false);
@@ -18,6 +19,7 @@ const {
   <div class="rubber-ducky-container" :class="{ 'rubber-ducky-container-menu': showController }">
 
     <div class="rubber-ducky" :class="{ 'rubber-ducky-menu': showController }">
+      <MinimizeIcon v-if="showController" class="minimize" @click="showController = false"/>
       <RubberDucky
         v-if="!showController"
         width="75px"
@@ -48,6 +50,17 @@ const {
 .rubber-ducky-container-menu {
   left: 0;
   transition: all 0.3s ease;
+  position: absolute;
+}
+
+.minimize {
+  position: relative;
+  top: 5px;
+  right: 5px;
+}
+
+.minimize:hover {
+  cursor: pointer;
 }
 
 .rubber-ducky-container:hover {
