@@ -2,7 +2,7 @@
 import { ref, onMounted, watch } from 'vue';
 import { useVoiceRecording } from '../composables/useVoiceRecording';
 import AudioMeter from './ui/AudioMeter.vue';
-import WaveForm from './ui/WaveForm.vue';
+import WaveForm from './ui/WaveForm/WaveForm.vue';
 import DuckyWithSpeechBubble from './RubberDucky/DuckyWithSpeechBubble.vue';
 
 const {
