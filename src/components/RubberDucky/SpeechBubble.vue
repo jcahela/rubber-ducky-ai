@@ -1,8 +1,8 @@
 <template>
   <div class="speech-bubble">
     <slot>
-      <p style="text-align: center;">Hi! I'm ducky!</p>
-      <p style="text-align: center;">I'm ready to listen!</p>
+      <p style="text-align: center">Hi! I'm ducky!</p>
+      <p style="text-align: center">I'm ready to listen!</p>
     </slot>
   </div>
 </template>
@@ -20,7 +20,7 @@
 }
 
 .speech-bubble::before {
-  content: "";
+  content: '';
   position: absolute;
   left: 35%;
   bottom: -21px;

@@ -23,19 +23,26 @@ app.post('/transcribe', upload.single('audio'), async (req, res) => {
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
-    const audioFile = new File([file.buffer], 'audio.webm', { type: file.mimetype });
+    const audioFile = new File([file.buffer], 'audio.webm', {
+      type: file.mimetype,
+    });
 
-    return res.json({ transcription: 'Comment this out to use transcription API'})
-
+    return res.json({
+      transcription: 'Comment this out to use transcription API',
+    });
+    // eslint-disable-next-line
     const transcription = await openai.audio.transcriptions.create({
       file: audioFile,
       model: 'whisper-1',
     });
 
-    console.log('\n\nTranscription:\n-----------------------------------------------------\n\n', transcription, '\n\n-----------------------------------------------------\n\n')
+    console.log(
+      '\n\nTranscription:\n-----------------------------------------------------\n\n',
+      transcription,
+      '\n\n-----------------------------------------------------\n\n'
+    );
 
     res.json({ transcription });
-    
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ error: 'Failed to transcribe audio' });

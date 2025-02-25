@@ -1,41 +1,40 @@
-
 <script setup>
 import { ref } from 'vue';
 import RubberDucky from './components/RubberDucky/RubberDuckyIcon.vue';
-import Controller from './components/Controller.vue';
+import MainView from './components/MainView.vue';
 import { useVoiceRecording } from './composables/useVoiceRecording';
 import MinimizeIcon from './components/ui/MinimizeIcon.vue';
 
 // State
-const showController = ref(false);
+const showMainView = ref(false);
 
-const {
-  isRecording
-} = useVoiceRecording();
-
+const { isRecording } = useVoiceRecording();
 </script>
 
 <template>
-  <div class="rubber-ducky-container" :class="{ 'rubber-ducky-container-menu': showController }">
-
-    <div class="rubber-ducky" :class="{ 'rubber-ducky-menu': showController }">
-      <MinimizeIcon v-if="showController" class="minimize" @click="showController = false"/>
+  <div
+    class="rubber-ducky-container"
+    :class="{ 'rubber-ducky-container-menu': showMainView }"
+  >
+    <div class="rubber-ducky" :class="{ 'rubber-ducky-menu': showMainView }">
+      <MinimizeIcon
+        v-if="showMainView"
+        class="minimize"
+        @click="showMainView = false"
+      />
       <RubberDucky
-        v-if="!showController"
+        v-if="!showMainView"
         width="75px"
         height="75px"
-        :showSpeechBubble="isRecording"
-        @click="showController = true"
+        :show-speech-bubble="isRecording"
+        @click="showMainView = true"
       />
-      <Controller v-if="showController"/>
+      <MainView v-if="showMainView" />
     </div>
-
   </div>
 </template>
 
-
 <style lang="postcss" scoped>
-
 .rubber-ducky-container {
   position: fixed;
   top: 60px;
@@ -78,7 +77,7 @@ const {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   border: 1px solid #afafaf;
   transition: all 0.3s ease;
@@ -98,5 +97,4 @@ const {
   border: 1px solid #0000004c;
   border-left: none;
 }
-
 </style>

@@ -13,7 +13,7 @@ const {
   preferredMicrophoneId,
   startRecording,
   stopRecording,
-  discardRecording
+  discardRecording,
 } = useVoiceRecording();
 
 const transcription = ref('');
@@ -22,7 +22,7 @@ const selectedMicrophone = ref({});
 const showSelectMicrophone = ref(false);
 
 async function handleTranscribe() {
-  if (!audioBlob.value) return
+  if (!audioBlob.value) return;
 
   try {
     const formData = new FormData();
@@ -56,21 +56,32 @@ function toggleRecording() {
 
 onMounted(async () => {
   allAudioInputDevices.value = (await navigator.mediaDevices.enumerateDevices())
-    .filter((device) => device.kind === 'audioinput' && !device.label.toLowerCase().includes('virtual'))
-    .map((physicalAudioDevice) => ({ label: physicalAudioDevice.label, deviceId: physicalAudioDevice.deviceId }));
+    .filter(
+      (device) =>
+        device.kind === 'audioinput' &&
+        !device.label.toLowerCase().includes('virtual')
+    )
+    .map((physicalAudioDevice) => ({
+      label: physicalAudioDevice.label,
+      deviceId: physicalAudioDevice.deviceId,
+    }));
 
-  selectedMicrophone.value = allAudioInputDevices.value.find((device) => device.deviceId === 'default');
+  selectedMicrophone.value = allAudioInputDevices.value.find(
+    (device) => device.deviceId === 'default'
+  );
 });
 
 watch(preferredMicrophoneId, (newPreferredMicrophoneId) => {
-  const newMicrophone = allAudioInputDevices.value.find((mic) => mic.deviceId === newPreferredMicrophoneId)
+  const newMicrophone = allAudioInputDevices.value.find(
+    (mic) => mic.deviceId === newPreferredMicrophoneId
+  );
   selectedMicrophone.value = newMicrophone;
 });
 </script>
 
 <template>
-  <div class="menu">
-    <DuckyWithSpeechBubble :onDuckyClick="toggleRecording">
+  <div class="main-view">
+    <DuckyWithSpeechBubble :on-ducky-click="toggleRecording">
       <div v-if="transcription">
         {{ transcription }}
       </div>
@@ -80,40 +91,35 @@ watch(preferredMicrophoneId, (newPreferredMicrophoneId) => {
           <p>1. Click me to start recording</p>
           <p>2. Click me again to stop recording</p>
         </div>
-  
+
         <div v-else-if="isRecording">
-          <p style="text-align: center;">I'm listening!</p>
-          <p style="text-align: center;">Click me again to stop recording</p>
+          <p style="text-align: center">I'm listening!</p>
+          <p style="text-align: center">Click me again to stop recording</p>
         </div>
-  
+
         <div v-else-if="audioBlob">
           <p>I've saved your wonderful recording!</p>
         </div>
       </div>
     </DuckyWithSpeechBubble>
-    
+
     <AudioMeter
       v-if="isRecording"
       class="audio-meter"
-      :audioLevel="audioLevel"
+      :audio-level="audioLevel"
     />
 
-    <WaveForm v-show="!isRecording && audioUrl"/>
+    <WaveForm v-show="!isRecording && audioUrl" />
 
-    <div
-      v-if="!isRecording && audioBlob"
-      class="controller"
-    >
-      <button @click="discardRecording">
-        Discard
-      </button>
+    <div v-if="!isRecording && audioBlob" class="controller">
+      <button @click="discardRecording">Discard</button>
 
-      <button @click="handleTranscribe">
-        Transcribe
-      </button>
+      <button @click="handleTranscribe">Transcribe</button>
     </div>
 
-    <p class="change-mic-collapsed" @click="showSelectMicrophone = !showSelectMicrophone">Change selected microphone</p>
+    <p class="change-mic" @click="showSelectMicrophone = !showSelectMicrophone">
+      Change selected microphone
+    </p>
 
     <div v-if="showSelectMicrophone">
       <div class="microphone-list">
@@ -121,6 +127,7 @@ watch(preferredMicrophoneId, (newPreferredMicrophoneId) => {
         <select v-model="preferredMicrophoneId">
           <option
             v-for="microphone in allAudioInputDevices"
+            :key="microphone.deviceId"
             :value="microphone.deviceId"
             :selected="microphone.deviceId === selectedMicrophone.deviceId"
           >
@@ -129,18 +136,18 @@ watch(preferredMicrophoneId, (newPreferredMicrophoneId) => {
         </select>
       </div>
 
-      <br/>
+      <br />
     </div>
 
     <div class="default-mic">
-      Selected Microphone:<br/> {{ selectedMicrophone.label }}
+      Selected Microphone:<br />
+      {{ selectedMicrophone.label }}
     </div>
-
   </div>
 </template>
 
 <style lang="postcss" scoped>
-.menu {
+.main-view {
   height: 100%;
   width: 100%;
   padding: 1rem;
@@ -160,14 +167,14 @@ watch(preferredMicrophoneId, (newPreferredMicrophoneId) => {
     margin-top: 1rem;
   }
 
-  .change-mic-collapsed {
+  .change-mic {
     width: fit-content;
     text-decoration: underline;
     font-size: 14px;
     margin-right: auto;
   }
 
-  .change-mic-collapsed:hover {
+  .change-mic:hover {
     cursor: pointer;
   }
 
@@ -175,6 +182,4 @@ watch(preferredMicrophoneId, (newPreferredMicrophoneId) => {
     width: 100%;
   }
 }
-
-
 </style>

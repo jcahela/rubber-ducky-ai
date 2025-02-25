@@ -1,0 +1,8 @@
+{
+  "eslint.enable": true,
+  "eslint.useESLintClass": true,
+  "eslint.run": "onType",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.requireConfig": true
+}

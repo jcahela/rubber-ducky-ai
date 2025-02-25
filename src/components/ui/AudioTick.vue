@@ -2,26 +2,29 @@
 const props = defineProps({
   level: {
     type: Number,
-    default: 0
+    default: 0,
   },
   position: {
     type: Number,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 const MIN_LEVEL = 0.09;
 const MAX_LEVEL = 0.85;
 
-const adjustedLevel = Math.max(MIN_LEVEL, Math.min(MAX_LEVEL, Math.round(props.level * 100) / 100))
+const adjustedLevel = Math.max(
+  MIN_LEVEL,
+  Math.min(MAX_LEVEL, Math.round(props.level * 100) / 100)
+);
 const calculatedHeightPercentage = adjustedLevel * 100;
 </script>
 
 <template>
-  <div 
+  <div
     class="audio-tick"
-    :style="{ 
+    :style="{
       transform: `translateX(${position}px)`,
-      height: `${calculatedHeightPercentage}%`
+      height: `${calculatedHeightPercentage}%`,
     }"
   />
 </template>

@@ -2,11 +2,13 @@
 import RubberDuckyIcon from './RubberDuckyIcon.vue';
 import SpeechBubble from './SpeechBubble.vue';
 
-const props = defineProps({
+defineProps({
   onDuckyClick: {
     type: Function,
-    default: () => { (console.log('Quack!')) }
-  }
+    default: () => {
+      console.log('Quack!');
+    },
+  },
 });
 </script>
 
@@ -14,13 +16,7 @@ const props = defineProps({
   <SpeechBubble>
     <slot></slot>
   </SpeechBubble>
-  <RubberDuckyIcon
-    height="75px"
-    width="75px"
-    @click="onDuckyClick"
-  />
+  <RubberDuckyIcon height="75px" width="75px" @click="onDuckyClick" />
 </template>
 
-<style lang="postcss" scoped>
-
-</style>
+<style lang="postcss" scoped></style>

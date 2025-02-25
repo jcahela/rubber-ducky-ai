@@ -29,14 +29,13 @@ onMounted(() => {
         labelColor: '#ffffff',
         lineWidth: 2,
         labelSize: '11px',
-      })
-    ]
+      }),
+    ],
   });
 
   wavesurfer.value.on('finish', () => {
     isPlaying.value = false;
-  })
-  
+  });
 });
 
 onUnmounted(() => {
@@ -93,7 +92,8 @@ function handlePlayPause() {
   align-items: center;
 }
 
-.play, .pause {
+.play,
+.pause {
   padding-left: 5px;
   padding-right: 5px;
 }
