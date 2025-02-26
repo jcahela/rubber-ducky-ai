@@ -17,7 +17,6 @@
   border-radius: 5px;
   padding: 15px;
   min-width: 200px;
-  margin: 20px;
   margin-bottom: 10px;
   max-height: 40vh;
   display: flex;
@@ -27,13 +26,14 @@
     overflow-y: auto;
     height: 100%;
     padding-right: 10px;
+    max-width: 100%;
   }
 }
 
 .speech-bubble::before {
   content: '';
   position: absolute;
-  left: 35%;
+  left: 40%;
   bottom: -21px;
   transform: translateY(-50%) rotate(45deg);
   width: 20px;

@@ -4,6 +4,7 @@ import { useVoiceRecording } from '../composables/useVoiceRecording';
 import AudioMeter from './ui/AudioMeter.vue';
 import WaveForm from './ui/WaveForm/WaveForm.vue';
 import DuckyWithSpeechBubble from './RubberDucky/DuckyWithSpeechBubble.vue';
+import MarkdownRenderer from './MarkdownRenderer.vue';
 
 const {
   isRecording,
@@ -16,7 +17,9 @@ const {
   discardRecording,
 } = useVoiceRecording();
 
-const transcription = ref('');
+const response = ref(
+  "# The Cosmic Web: The Universe's Largest Structure\n\nDid you know that the universe isn't just a random scattering of galaxies? Instead, it's organized into a vast, intricate network known as the **Cosmic Web**! 🌌\n\n## What is the Cosmic Web?\n\nThe Cosmic Web is a **large-scale structure** of the universe, consisting of:\n- **Filaments**: Long, thread-like structures made of dark matter and gas.\n- **Nodes**: Dense regions where filaments intersect, often home to galaxy clusters.\n- **Voids**: Vast, empty spaces between filaments.\n\nThis structure is often compared to a spider's web or a neural network.\n\n## How Did It Form?\n\nThe Cosmic Web formed due to the gravitational effects of **dark matter** and the expansion of the universe. Tiny fluctuations in the early universe grew over billions of years, creating this web-like pattern.\n\n### Key Facts:\n1. **Scale**: Filaments can stretch for hundreds of millions of light-years.\n2. **Dark Matter**: Makes up about **85%** of the universe's mass and holds the Cosmic Web together.\n3. **Galaxies**: Most galaxies, including our Milky Way, reside along these filaments.\n\n## Why Is It Important?\n\nThe Cosmic Web helps us understand:\n- The distribution of matter in the universe.\n- The role of dark matter and dark energy.\n- How galaxies form and evolve.\n\n> \"The Cosmic Web is the universe's blueprint, revealing the hidden architecture of everything we see.\" — *Astronomers*\n\n## Visualizing the Cosmic Web\n\nHere’s a simple representation:\n\n```\nFilament ———— Node ———— Filament\n         \\       /\n          \\     /\n           Void\n```\n\nFor more information, check out [this NASA article](https://www.nasa.gov) on the Cosmic Web.\n\n---\n\n*Remember, the universe is not just vast—it's also beautifully structured!* ✨"
+);
 const allAudioInputDevices = ref([]);
 const selectedMicrophone = ref({});
 const showSelectMicrophone = ref(false);
@@ -37,12 +40,12 @@ async function handleTranscribe() {
       throw new Error('Failed to transcribe audio');
     }
 
-    const { transcription: result } = await response.json();
-    transcription.value = result;
+    const { response: result } = await response.json();
+    response.value = result;
 
-    console.log('Transcription successful: ', result);
+    console.log('Response successful: ', result);
   } catch (error) {
-    console.error('Transcription failed: ', error);
+    console.error('Response failed: ', error);
   }
 }
 
@@ -82,8 +85,8 @@ watch(preferredMicrophoneId, (newPreferredMicrophoneId) => {
 <template>
   <div class="main-view">
     <DuckyWithSpeechBubble :on-ducky-click="toggleRecording">
-      <div v-if="transcription">
-        {{ transcription }}
+      <div v-if="response">
+        <MarkdownRenderer :markdown="response" />
       </div>
 
       <div v-else>
