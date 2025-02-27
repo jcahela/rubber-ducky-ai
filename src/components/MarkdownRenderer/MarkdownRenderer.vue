@@ -2,7 +2,7 @@
 import { toRef, ref, watch, onMounted } from 'vue';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
-import MermaidDiagram from './MarkdownRenderer/MermaidDiagram.vue';
+import MermaidDiagram from './MermaidDiagram.vue';
 
 const props = defineProps({
   markdown: {
