@@ -4,7 +4,7 @@ import { useVoiceRecording } from '../composables/useVoiceRecording';
 import AudioMeter from './ui/AudioMeter.vue';
 import WaveForm from './ui/WaveForm/WaveForm.vue';
 import DuckyWithSpeechBubble from './RubberDucky/DuckyWithSpeechBubble.vue';
-import MarkdownRenderer from './MarkdownRenderer.vue';
+import MarkdownRenderer from './MarkdownRenderer/MarkdownRenderer.vue';
 
 const {
   isRecording,
