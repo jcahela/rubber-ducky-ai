@@ -13,6 +13,7 @@
   "dependencies": {
     "dompurify": "^3.2.4",
     "marked": "^15.0.7",
+    "mermaid": "^11.4.1",
     "vue": "^3.3.0",
     "wavesurfer.js": "^7.9.1"
   },

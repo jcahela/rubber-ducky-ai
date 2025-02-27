@@ -26,7 +26,7 @@
     overflow-y: auto;
     height: 100%;
     padding-right: 10px;
-    max-width: 100%;
+    width: fit-content;
   }
 }
 
