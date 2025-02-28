@@ -17,39 +17,41 @@ const {
   discardRecording,
 } = useVoiceRecording();
 
-const response = ref(
-  '<h1>Flowchart Diagram</h1>\n\n```mermaid\nflowchart TD\n    A[Start] --> B{Decision?}\n    B -->|Yes| C[Do something]\n    B -->|No| D[Do something else]\n    C --> E[End]\n    D --> E\n```\n\n<p>This is a sample paragraph following the Flowchart diagram. It should render below the diagram.</p>'
-);
+const response = ref('');
 const allAudioInputDevices = ref([]);
 const selectedMicrophone = ref({});
 const showSelectMicrophone = ref(false);
 
-async function handleTranscribe() {
+async function handleTranscribeAndResponse() {
   if (!audioBlob.value) return;
 
   try {
     const formData = new FormData();
     formData.append('audio', audioBlob.value, 'audio.webm');
 
-    const response = await fetch('http://localhost:3001/transcribe', {
-      method: 'POST',
-      body: formData,
-    });
+    const fetchedResponse = await fetch(
+      'http://localhost:3001/generateDiagram',
+      {
+        method: 'POST',
+        body: formData,
+      }
+    );
 
-    if (!response.ok) {
-      throw new Error('Failed to transcribe audio');
+    if (!fetchedResponse.ok) {
+      throw new Error('Failed to deliver response');
     }
 
-    const { response: result } = await response.json();
-    response.value = result;
-
-    console.log('Response successful: ', result);
+    response.value = await fetchedResponse.text();
   } catch (error) {
     console.error('Response failed: ', error);
   }
 }
 
 function toggleRecording() {
+  if (response.value) {
+    response.value = '';
+    discardRecording();
+  }
   if (isRecording.value) {
     stopRecording();
   } else {
@@ -112,12 +114,12 @@ watch(preferredMicrophoneId, (newPreferredMicrophoneId) => {
       :audio-level="audioLevel"
     />
 
-    <WaveForm v-show="!isRecording && audioUrl" />
+    <WaveForm v-show="!isRecording && audioUrl && !response" />
 
-    <div v-if="!isRecording && audioBlob" class="controller">
+    <div v-if="!isRecording && audioBlob && !response" class="controller">
       <button @click="discardRecording">Discard</button>
 
-      <button @click="handleTranscribe">Transcribe</button>
+      <button @click="handleTranscribeAndResponse">Send to Ducky!</button>
     </div>
 
     <p class="change-mic" @click="showSelectMicrophone = !showSelectMicrophone">

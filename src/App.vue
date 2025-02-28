@@ -85,7 +85,7 @@ const { isRecording } = useVoiceRecording();
 
 .rubber-ducky-menu {
   height: fit-content;
-  width: 400px;
+  width: fit-content;
   justify-content: flex-start;
   align-items: flex-end;
   flex-direction: column;
