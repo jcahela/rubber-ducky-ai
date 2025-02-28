@@ -4,6 +4,7 @@ const isRecording = ref(false);
 const audioChunks = ref([]);
 const audioLevel = ref(0);
 const preferredMicrophoneId = ref('default');
+const isLoading = ref(false);
 
 const audioBlob = computed(() => {
   if (audioChunks.value.length === 0) return null;
@@ -120,6 +121,7 @@ export function useVoiceRecording() {
     audioBlob,
     audioUrl,
     preferredMicrophoneId,
+    isLoading,
     startRecording,
     stopRecording,
     discardRecording,

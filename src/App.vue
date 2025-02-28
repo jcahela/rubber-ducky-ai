@@ -8,7 +8,7 @@ import MinimizeIcon from './components/ui/MinimizeIcon.vue';
 // State
 const showMainView = ref(false);
 
-const { isRecording } = useVoiceRecording();
+const { isRecording, isLoading } = useVoiceRecording();
 </script>
 
 <template>
@@ -18,7 +18,7 @@ const { isRecording } = useVoiceRecording();
   >
     <div class="rubber-ducky" :class="{ 'rubber-ducky-menu': showMainView }">
       <MinimizeIcon
-        v-if="showMainView"
+        v-if="showMainView && !isLoading"
         class="minimize"
         @click="showMainView = false"
       />
@@ -85,6 +85,7 @@ const { isRecording } = useVoiceRecording();
 
 .rubber-ducky-menu {
   height: fit-content;
+  min-width: 350px;
   width: fit-content;
   justify-content: flex-start;
   align-items: flex-end;

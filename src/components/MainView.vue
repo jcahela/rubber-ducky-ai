@@ -12,6 +12,7 @@ const {
   audioBlob,
   audioUrl,
   preferredMicrophoneId,
+  isLoading,
   startRecording,
   stopRecording,
   discardRecording,
@@ -23,6 +24,7 @@ const selectedMicrophone = ref({});
 const showSelectMicrophone = ref(false);
 
 async function handleTranscribeAndResponse() {
+  isLoading.value = true;
   if (!audioBlob.value) return;
 
   try {
@@ -45,9 +47,13 @@ async function handleTranscribeAndResponse() {
   } catch (error) {
     console.error('Response failed: ', error);
   }
+  await new Promise((resolve) => setTimeout(resolve, 10000));
+
+  isLoading.value = false;
 }
 
 function toggleRecording() {
+  if (isLoading.value) return;
   if (response.value) {
     response.value = '';
     discardRecording();
@@ -86,7 +92,10 @@ watch(preferredMicrophoneId, (newPreferredMicrophoneId) => {
 
 <template>
   <div class="main-view">
-    <DuckyWithSpeechBubble :on-ducky-click="toggleRecording">
+    <DuckyWithSpeechBubble
+      :is-loading="isLoading"
+      :on-ducky-click="toggleRecording"
+    >
       <div v-if="response">
         <MarkdownRenderer :markdown="response" />
       </div>
@@ -117,16 +126,22 @@ watch(preferredMicrophoneId, (newPreferredMicrophoneId) => {
     <WaveForm v-show="!isRecording && audioUrl && !response" />
 
     <div v-if="!isRecording && audioBlob && !response" class="controller">
-      <button @click="discardRecording">Discard</button>
+      <button :disabled="isLoading" @click="discardRecording">Discard</button>
 
-      <button @click="handleTranscribeAndResponse">Send to Ducky!</button>
+      <button :disabled="isLoading" @click="handleTranscribeAndResponse">
+        Send to Ducky!
+      </button>
     </div>
 
-    <p class="change-mic" @click="showSelectMicrophone = !showSelectMicrophone">
+    <p
+      v-if="allAudioInputDevices.length > 1 && !isLoading && !isRecording"
+      class="change-mic"
+      @click="showSelectMicrophone = !showSelectMicrophone"
+    >
       Change selected microphone
     </p>
 
-    <div v-if="showSelectMicrophone">
+    <div v-if="showSelectMicrophone && !isLoading && !isRecording">
       <div class="microphone-list">
         Microphones:
         <select v-model="preferredMicrophoneId">
@@ -144,7 +159,7 @@ watch(preferredMicrophoneId, (newPreferredMicrophoneId) => {
       <br />
     </div>
 
-    <div class="default-mic">
+    <div v-if="!isLoading" class="default-mic">
       Selected Microphone:<br />
       {{ selectedMicrophone.label }}
     </div>
