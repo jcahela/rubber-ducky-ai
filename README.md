@@ -14,13 +14,13 @@
   <summary id="table-of-contents">Table of Contents</summary>
   <ol>
     <li>
+      <a href="#about-the-project">About The Project</a>
+    </li>
+    <li>
       <a href="#installation-instructions">Installation Instructions</a>
     </li>
     <li>
       <a href="#workflow-overview">Workflow Overview</a>
-    </li>
-    <li>
-      <a href="#about-the-project">About The Project</a>
     </li>
     <li>
       <a href="#how-to-use">How to use</a>
